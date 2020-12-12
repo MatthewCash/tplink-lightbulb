@@ -115,7 +115,13 @@ light.send({
           return reject(err)
         }
         client.on('message', msg => {
-          resolve(JSON.parse(this.decrypt(msg).toString()))
+          let data;
+          try {
+            data = JSON.parse(this.decrypt(msg).toString())
+          } catch (error) {
+            if (process.env.WARN_PARSE_ERR) console.warn(error)
+          }            
+          resolve(data)
           client.close()
         })
       })
