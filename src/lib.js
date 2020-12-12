@@ -105,7 +105,10 @@ light.send({
       if (!this.ip) {
         return reject(new Error('IP not set.'))
       }
-      const client = dgram.createSocket('udp4')
+      const client = dgram.createSocket({
+        type: 'udp4',
+        reuseAddr: true
+      })
       const message = this.encrypt(Buffer.from(JSON.stringify(msg)))
       client.send(message, 0, message.length, 9999, this.ip, (err, bytes) => {
         if (err) {
